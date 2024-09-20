@@ -83,29 +83,27 @@ ColorContrastChecker.prototype = {
             return this.verifyContrastRatio(contrastRatio);
         }   
     },
-    checkPairs: function (pairs, customRatio) {
+    checkPairs: function (pairs, customRatio, verbose) {
         var results = [];
 
         for (var i in pairs) {
             var pair = pairs[i];
-            if (typeof pair.fontSize !== "undefined") {
-                results.push(
-                    this.check(
-                        pair.colorA,
-                        pair.colorB,
-                        pair.fontSize,
-                        customRatio
-                    )
-                );
+            var fontSize = typeof pair.fontSize !== "undefined" ? pair.fontSize : void 0;
+            var result = this.check(
+                pair.colorA,
+                pair.colorB,
+                fontSize,
+                customRatio
+            );
+            if (verbose) {
+                results.push({
+                    colorA: pair.colorA,
+                    colorB: pair.colorB,
+                    fontSize: fontSize,
+                    result: result
+                });
             } else {
-                results.push(
-                    this.check(
-                        pair.colorA,
-                        pair.colorB,
-                        void 0,
-                        customRatio
-                    )
-                );
+                results.push(result);
             }
         }
         return results;
